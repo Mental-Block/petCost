@@ -14,7 +14,8 @@ const APP = (() => {
         filterNodesbyTag: (array, comp, tag) => {
           let res = array.filter(el => el.getAttribute(tag) === comp.getAttribute(tag))
           return res[0]
-        }
+        },
+        ifNaN: (value, defaultValue) => {if(isNaN(value)) value = defaultValue; return value}
     }
 
     const EVENT = {
@@ -180,7 +181,6 @@ const APP = (() => {
             let total;
             if(array.length === 0) total = 0
             else total = array.reduce((total, value) => total + value)
-            if(isNaN(array[0])) total = 0;
 
             UTIL.elId("amount").innerHTML = `Estimated dollars $${total} per month`
         }
@@ -197,9 +197,10 @@ const APP = (() => {
     
     const INIT = () => {
         CATEGORY.removeAll(UTIL.convertToArray(UTIL.el('[data-name]', true))); // REMOVE PREVIOUSLY RENDERED CATEGORIES
-        STATE.CATEGORIES.map(({name, label, value}) => CATEGORY.create(name, label, value)) // RENDER CATEGORIES
-        CHART(STATE.CATEGORIES.map(({label}) => label), STATE.CATEGORIES.map(({value}) => value)) // RENDER CHART
-        CATEGORY.addTotal(STATE.CATEGORIES.map(({value}) => value)) // RENDER TOTAL
+        
+        STATE.CATEGORIES.map(({name, label, value}) => CATEGORY.create(name, label, UTIL.ifNaN(value, 0))) // RENDER CATEGORIES
+        CHART(STATE.CATEGORIES.map(({label}) => label), STATE.CATEGORIES.map(({value}) => UTIL.ifNaN(value, 0))) // RENDER CHART
+        CATEGORY.addTotal(STATE.CATEGORIES.map(({value}) => UTIL.ifNaN(value, 0))) // RENDER TOTAL
 
         const OPEN_PROMPT = UTIL.elId("categoryAdd") // OPEN PROMPT BUTTON
         const REMOVE_BUTTON = UTIL.convertToArray(UTIL.el('[data-del]', true)) // CATEGORIE BUTTONS
