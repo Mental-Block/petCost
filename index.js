@@ -177,10 +177,10 @@ const APP = (() => {
         }
 
         function addTotal(array){
-            let total = 0;
+            let total;
             if(array.length === 0) total = 0
             else total = array.reduce((total, value) => total + value)
-            if(isNaN(array)) total = 0;
+            if(isNaN(array[0])) total = 0;
 
             UTIL.elId("amount").innerHTML = `Estimated dollars $${total} per month`
         }
