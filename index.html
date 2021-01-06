@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/node_modules/reset-css/reset.css" />
+        <link rel="stylesheet" href="./style.css">
+        <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+        <script async type="text/javascript" src="./index.js"></script>
+        <title>Document</title>
+    </head>
+    <body class="center">
+        <main >
+            <h1 class="header">How much will your pet(s) roughly cost you this year</h1>
+            <div class="wrapper">
+                <div class="space-between">
+                    <div class="container center">
+                        <div class="category">
+                            <div class="space-between">
+                                <button id="categoryAdd" class="category__button space-between">
+                                    <span class="category__add"></span>
+                                    <span> add category </span>
+                                </button>
+                                <button id="categoryRest" class="category__button space-between">
+                                    <span class="category__reset"></span>
+                                    <span>reset</span>
+                                </button>
+                            </div>
+                        
+                            <h2 class="category__header">Enter the estimated amount per month</h2>
+                            <div id="inputBoxes"></div>
+                        </div>  
+                    </div>
+
+                    <div class="container center">
+                        <canvas id="chart" width="400" height="400"></canvas>
+                        <div id="amount"></div>   
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
