@@ -94,6 +94,8 @@ const APP = (() => {
 
     const CATEGORY = (() => {
         function create(name, label, value){
+            if(isNaN(value)) value = 0;
+
             const section = `
                     <div data-name=${name} class="category__section">
                         <div class="category__control space-between">
@@ -135,15 +137,19 @@ const APP = (() => {
         }
 
         function nameCreate(str) {
-            const regex = /[^a-zA-Z]/gi
-            let newStr = str.replace(regex, '');
-            return newStr
+            str = str.toLowerCase()
+            return str
         }
     
         function labelCreate(str){
-            if(str.length === 0) str = "Defualt Value"
-            if(!isNaN(str)) str = "No Numbers"
-            if(str.length > 30) str = "Less than 30 characters"
+            str = str.replace(/[^a-zA-Z]/gi, ''); // filter all the crap
+            if(str.length !== 0){
+                let start = str.substring(0, 1).toLocaleUpperCase() 
+                let end = str.substring(1, str.length)
+                str = start + end
+            }       
+            else str = "Defualt Value"
+
             return str;   
         }
     
@@ -159,21 +165,23 @@ const APP = (() => {
 
         function keepValueSame(el, elOne, tag){
             if(el.value > 1000) el.value = 1000;
+            if(isNaN(el.value)) el.value = 0;
             
-            const category = getStateByTag(el, tag)
-            let newValue = elOne.value = el.value 
-            let newCategoy = {name: category.name, label: category.label,  value:parseInt(newValue)}
+            const {name, label} = getStateByTag(el, tag);
+            let newValue = elOne.value = el.value;
+            let newCategoy = {name: name, label: label,  value:parseInt(newValue)};
             
-            let index = STATE.CATEGORIES.findIndex(({name}) => name === category.name);
+            let index = STATE.CATEGORIES.findIndex((category) => category.name === name);
             STATE.CATEGORIES[index] = newCategoy;
             INIT()
         }
 
         function addTotal(array){
-            let total;
+            let total = 0;
             if(array.length === 0) total = 0
             else total = array.reduce((total, value) => total + value)
-           
+            if(isNaN(array)) total = 0;
+
             UTIL.elId("amount").innerHTML = `Estimated dollars $${total} per month`
         }
 
