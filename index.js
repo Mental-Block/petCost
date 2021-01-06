@@ -215,7 +215,7 @@ const APP = (() => {
         REMOVE_BUTTON.map(button => button.addEventListener(EVENT.click, (event) => CATEGORY.remove(event.path[1])))
     } 
     
-    UTIL.elId("categoryRest").addEventListener(EVENT.click, () => {STATE.CATEGORIES = INITALSTATE; INIT()}) 
+    UTIL.elId("categoryRest").addEventListener(EVENT.click, () => {STATE.CATEGORIES = [...INITALSTATE]; console.log(STATE.CATEGORIES); console.log(INITALSTATE);  INIT()}) 
 
     return {INIT}
 })()
