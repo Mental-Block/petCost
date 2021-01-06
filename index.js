@@ -32,7 +32,7 @@ const APP = (() => {
     ];
 
     const STATE = {
-        CATEGORIES: [...INITALSTATE],
+        CATEGORIES : [...INITALSTATE],
     };
 
     const CHART = (labels, data) => {
@@ -159,15 +159,13 @@ const APP = (() => {
 
         function keepValueSame(el, elOne, tag){
             if(el.value > 1000) el.value = 1000;
-
-            let categoy = getStateByTag(el, tag)
-            let newValue = elOne.value = el.value 
-
-            categoy.value = parseInt(newValue)
             
-            let index = STATE.CATEGORIES.findIndex(({name}) => name === categoy.name);
-            STATE.CATEGORIES[index] === categoy
-
+            const category = getStateByTag(el, tag)
+            let newValue = elOne.value = el.value 
+            let newCategoy = {name: category.name, label: category.label,  value:parseInt(newValue)}
+            
+            let index = STATE.CATEGORIES.findIndex(({name}) => name === category.name);
+            STATE.CATEGORIES[index] = newCategoy;
             INIT()
         }
 
@@ -190,7 +188,7 @@ const APP = (() => {
     })()
     
     const INIT = () => {
-        CATEGORY.removeAll(UTIL.convertToArray(UTIL.el('[data-name]', true))); // REMOVE PREVIOUSLY RENDERED CATEGORIES 
+        CATEGORY.removeAll(UTIL.convertToArray(UTIL.el('[data-name]', true))); // REMOVE PREVIOUSLY RENDERED CATEGORIES
         STATE.CATEGORIES.map(({name, label, value}) => CATEGORY.create(name, label, value)) // RENDER CATEGORIES
         CHART(STATE.CATEGORIES.map(({label}) => label), STATE.CATEGORIES.map(({value}) => value)) // RENDER CHART
         CATEGORY.addTotal(STATE.CATEGORIES.map(({value}) => value)) // RENDER TOTAL
@@ -199,17 +197,18 @@ const APP = (() => {
         const REMOVE_BUTTON = UTIL.convertToArray(UTIL.el('[data-del]', true)) // CATEGORIE BUTTONS
         const INPUTS = UTIL.convertToArray(UTIL.el('[data-input]', true)); // INPUTS
         const SLIDERS = UTIL.convertToArray(UTIL.el('[data-slider]', true)); //SLIDERS
-        const RESET = UTIL.elId("categoryRest")
+       
 
 
         OPEN_PROMPT.addEventListener(EVENT.click, PROMPT.create); 
         INPUTS.map(input => input.addEventListener(EVENT.onChange, (event) => CATEGORY.keepValueSame(event.target, UTIL.filterNodesbyTag(SLIDERS, event.target, "name"), "data-input"))) 
         SLIDERS.map(slider => slider.addEventListener(EVENT.onChange, (event) => CATEGORY.keepValueSame( event.target, UTIL.filterNodesbyTag(INPUTS, event.target, "name"), "data-slider")))
         REMOVE_BUTTON.map(button => button.addEventListener(EVENT.click, (event) => CATEGORY.remove(event.path[1])))
-        RESET.addEventListener(EVENT.click, () => {STATE.CATEGORIES = INITALSTATE; INIT()})
-    }
+    } 
+    
+    UTIL.elId("categoryRest").addEventListener(EVENT.click, () => {STATE.CATEGORIES = INITALSTATE; INIT()}) 
 
     return {INIT}
 })()
 
-document.addEventListener("DOMContentLoaded", APP.INIT());
+APP.INIT();
